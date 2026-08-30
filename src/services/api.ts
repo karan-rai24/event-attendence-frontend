@@ -8,12 +8,18 @@ const api = axios.create({
   },
 });
 
+let onUnauthorized: (() => void) | null = null;
+
+export function setOnUnauthorized(handler: () => void) {
+  onUnauthorized = handler;
+}
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const url = error.config?.url || "";
     if (error.response?.status === 401 && !url.includes("/auth/me")) {
-      window.location.href = "/login";
+      onUnauthorized?.();
     }
     return Promise.reject(error);
   }

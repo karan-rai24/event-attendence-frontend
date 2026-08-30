@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useCallback, useEffect, type React
 import type { User } from "../types/user";
 import type { Role } from "../types/auth";
 import * as authService from "../services/auth.service";
+import { setOnUnauthorized } from "../services/api";
 
 interface AuthContextType {
   user: User | null;
@@ -25,6 +26,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then((u) => setUser(u))
       .catch(() => setUser(null))
       .finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    setOnUnauthorized(() => setUser(null));
   }, []);
 
   const isAuthenticated = user !== null;
