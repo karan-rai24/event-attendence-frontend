@@ -8,7 +8,6 @@ interface QRScannerCameraProps {
 
 export default function QRScannerCamera({ onScan, isScanning }: QRScannerCameraProps) {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -29,9 +28,8 @@ export default function QRScannerCamera({ onScan, isScanning }: QRScannerCameraP
         () => {}
       )
       .then(() => setHasPermission(true))
-      .catch((err) => {
+      .catch(() => {
         setHasPermission(false);
-        setError("Camera access denied or unavailable");
       });
 
     return () => {

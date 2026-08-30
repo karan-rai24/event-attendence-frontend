@@ -4,7 +4,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import type { Role } from "../../types/auth";
 
 const registerSchema = z
   .object({
@@ -12,7 +11,7 @@ const registerSchema = z
     email: z.string().min(1, "Email is required").email("Invalid email format"),
     phone: z.string().min(1, "Phone is required").regex(/^\d{10}$/, "Phone must be 10 digits"),
     password: z.string().min(6, "Password must be at least 6 characters"),
-    role: z.enum(["student", "organizer"]) as z.ZodType<Role>,
+    role: z.enum(["student", "organizer"]),
     organizer_code: z.string().optional(),
   })
   .refine(
